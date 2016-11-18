@@ -34,6 +34,7 @@ var app = express();
 app.set( 'view engine', 'ejs' );
 
 // Set use middlewares
+
 /** 미들웨어(Middlewares) 란?
  * 사용자 요청(Request)에 대한 서버로 부터의 응답(Response)은 라우터(Router)를 통해 어떤 응답을 할지 정한다.
  * 미들웨어는 라우터를 통하기 전의 모든 신호들에게 수행되는 명령어이다.
