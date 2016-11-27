@@ -7,7 +7,7 @@ var app = express();
 
 
 // Mongodb settings
-mongoose.connect( 'mongodb://mst:1234@ds053156.mlab.com:53156/myapp_db' );
+mongoose.connect( process.env.MONGODB );
 var db = mongoose.connection;
 
 db.once( 'open', function () {
