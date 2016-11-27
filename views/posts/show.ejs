@@ -1,0 +1,33 @@
+<!-- header -->
+<% include ../partials/header %>
+
+	<!-- top -->
+	<% include partials/top %>
+
+	<!-- Show body -->
+	<article>
+		<h3><%= data.title %></h3>
+
+		<p>Created at <%= data.createdAt.toLocaleDateString() %> <%= data.createdAt.toLocaleTimeString() %></p>
+
+		<% if ( data.updatedAt ) { %>
+			<p>Updated at <%= data.updatedAt.toLocaleDateString() %> <%= data.updatedAt.toLocaleTimeString() %></p>
+		<% } %>
+
+		<hr>
+
+		<p><%= data.body %></p>
+	</article>
+
+	<a href="/posts">Index back</a>
+
+	<a href="/posts/new">New</a>
+
+	<a href="/posts/edit/<%= data._id %>">Edit</a>
+
+	<form action="/posts/<%= data._id %>?_method=delete" method="post">
+		<button type="submit">Delete</button>
+	</form>
+
+<!-- footer -->
+<% include ../partials/footer %>

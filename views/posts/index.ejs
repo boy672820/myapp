@@ -1,0 +1,20 @@
+<!-- header -->
+<% include ../partials/header %>
+
+	<!-- top -->
+	<% include partials/top %>
+
+	<!-- Index body -->
+	<a href="/posts/new">New</a>
+
+	<ul>
+		<% data.forEach( function ( e ) { %>
+			<li>
+				<a href="/posts/<%= e._id %>"><%= e.title %></a>
+				<span><%= e.createdAt.toLocaleDateString() %></span>
+			</li>
+		<% } ) %>
+	</ul>
+
+<!-- footer -->
+<% include ../partials/footer %>

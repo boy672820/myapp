@@ -1,63 +1,50 @@
-// Modules
-var express = require( 'express' );
-var mongoose = require( 'mongoose' );
-var path = require( 'path' );
-// Express
-var app = express();
+// Import modules
+var express = require( 'express' ),
+	mongoose = require( 'mongoose' ),
+	path = require( 'path' ),
+	bodyParser = require( 'body-parser' ),
+	methodOverride = require( 'method-override' );
 
 
-// Mongodb settings
+// Connect database
+mongoose.Promise = global.Promise;
 mongoose.connect( process.env.MONGODB );
+
 var db = mongoose.connection;
 
 db.once( 'open', function () {
-  console.log( 'DB Connected!' );
+	console.log( 'DB Connected!' );
 } );
+
 db.on( 'error', function ( error ) {
-  console.log( 'DB Error: ', error );
+	console.log( 'DB Error: ', error );
 } );
 
-var DataSchema = mongoose.Schema( {
-  name: String,
-  count: Number
-} );
 
-var Data = mongoose.model( 'data', DataSchema );
+// Express app instance
+var app = express();
 
-
-// App settings
+// View setting
+// 뷰 엔진 :: Embedded JavaScript
 app.set( 'view engine', 'ejs' );
-//app.use( express.static( path.join( __dirname, 'public' ) ) );
+
+// Set use middlewares
+
+/** 미들웨어(Middlewares) 란?
+ * 사용자 요청(Request)에 대한 서버로 부터의 응답(Response)은 라우터(Router)를 통해 어떤 응답을 할지 정한다.
+ * 미들웨어는 라우터를 통하기 전의 모든 신호들에게 수행되는 명령어이다.
+ * app.use() 를 통해 수행될 수 있으며, 해당 명령어는 라우터보다 위에 위치해야 한다.
+ */
+app.use( express.static( path.join( __dirname, 'static' ) ) );
+app.use( bodyParser.json() );
+app.use( bodyParser.urlencoded( { extended: true } ) );
+app.use( methodOverride( '_method' ) );
+
+// Set routes
+app.use( '/posts', require( './routes/posts' ) );
 
 
-// Learning Node.js & Express framework coding!
-app.get( '/', function ( req, res ) {
-  Data.findOne( { name: 'myData' }, function ( error, data ) {
-    if ( error ) return console.log( 'Data Error: ', error );
-
-    data.count += 1;
-    data.save( function ( error ) {
-      if ( error ) return console.log( 'Data Error: ', error );
-
-      res.render( 'index', data );
-    } );
-  } );
-} );
-/*
-app.get( '/reset', function( req, res ) {
-  data.count = 0;
-  res.render( 'index', data );
-} );
-app.get( '/set/count', function ( req, res ) {
-  if ( req.query.count ) data.count = parseInt( req.query.count );
-  res.render( 'index', data );
-} );
-app.get( '/set/:num', function ( req, res ) {
-  data.count = parseInt( req.params.num );
-  res.render( 'index', data );
-} );
-*/
 // Listen HTTP Server
 app.listen( 8000, function () {
-  console.log( 'Server on!' );
+	console.log( 'Server on!' );
 } );
